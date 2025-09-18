@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOTS6027 Console - Access Restricted</title>
+  <link rel="stylesheet" href="https://saphahcentral.github.io/saphahcentral/style-public.css">
+</head>
+<body>
+  <!-- Fetch header -->
+  <div id="header"></div>
+  <script>
+    fetch('header.html')
+      .then(response => response.text())
+      .then(html => document.getElementById('header').innerHTML = html);
+  </script>
+
+  <!-- Main content -->
+  <main style="text-align: center; margin-top: 50px;">
+    <h1>Access Restricted</h1>
+    <p>This console is restricted. Public access is not permitted.</p>
+  </main>
+
+  <!-- Fetch footer -->
+  <div id="footer"></div>
+  <script>
+    fetch('footer.html')
+      .then(response => response.text())
+      .then(html => document.getElementById('footer').innerHTML = html);
+  </script>
+</body>
+</html>
