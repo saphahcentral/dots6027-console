@@ -1,0 +1,44 @@
+name: Publish DOM Message
+
+on:
+  workflow_dispatch:
+    inputs:
+      specialName:
+        description: 'Optional special message name'
+        required: false
+      subject:
+        description: 'Message subject'
+        required: true
+      body:
+        description: 'Message body'
+        required: true
+
+jobs:
+  publish-message:
+    runs-on: ubuntu-latest
+
+    env:
+      SMTP_USER: ${{ secrets.SMTP_USER }}
+      SMTP_PASS: ${{ secrets.SMTP_PASS }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Save input to JSON
+        run: |
+          mkdir -p .github/workflows/tmp
+          echo "{
+            \"specialName\": \"${{ github.event.inputs.specialName }}\",
+            \"subject\": \"${{ github.event.inputs.subject }}\",
+            \"body\": \"${{ github.event.inputs.body }}\"
+          }" > .github/workflows/tmp/input.json
+
+      - name: Run publish-message.js
+        run: node .github/workflows/publish-message.js
