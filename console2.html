@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DOTS6027 - Console 2</title>
+  <link rel="stylesheet" href="https://saphahcentral.github.io/saphah/style-internal.css">
+  <script src="publish-message.js" defer></script>
+  <style>
+    body { padding: 2em; }
+    h1 { text-align: center; margin-bottom: 1em; }
+    .form-container { max-width: 800px; margin: auto; display: flex; flex-direction: column; gap: 1em; }
+    input, textarea, select, button { padding: 0.5em; font-size: 1em; width: 100%; }
+    button { background-color: #4a90e2; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background-color: #357ab8; }
+  </style>
+</head>
+<body>
+
+  <h1>Console 2: Student & Lecture Review Service</h1>
+
+  <div class="form-container">
+    <label for="studentSelect">Select Student:</label>
+    <select id="studentSelect"></select>
+
+    <label for="lectureSelect">Select Lecture:</label>
+    <select id="lectureSelect"></select>
+
+    <label for="reviewNotes">Review Notes:</label>
+    <textarea id="reviewNotes" rows="10" placeholder="Enter review notes here"></textarea>
+
+    <button id="submitReviewBtn">Submit Review & Link AES</button>
+  </div>
+
+</body>
+</html>
