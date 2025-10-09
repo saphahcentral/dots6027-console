@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DOTS6027 - Console 1</title>
+  <link rel="stylesheet" href="https://saphahcentral.github.io/saphah/style-internal.css">
+  <script src="publish-message.js" defer></script>
+  <style>
+    body { padding: 2em; }
+    h1 { text-align: center; margin-bottom: 1em; }
+    .form-container { max-width: 800px; margin: auto; display: flex; flex-direction: column; gap: 1em; }
+    input, textarea, select, button { padding: 0.5em; font-size: 1em; width: 100%; }
+    button { background-color: #4a90e2; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background-color: #357ab8; }
+  </style>
+</head>
+<body>
+
+  <h1>Console 1: Member & Message Posting Service</h1>
+
+  <div class="form-container">
+    <label for="memberSelect">Select Member:</label>
+    <select id="memberSelect"></select>
+
+    <label for="messageSubject">Message Subject:</label>
+    <input type="text" id="messageSubject" placeholder="Enter subject here">
+
+    <label for="messageBody">Message Body:</label>
+    <textarea id="messageBody" rows="10" placeholder="Enter message here"></textarea>
+
+    <label for="messageType">Message Type:</label>
+    <select id="messageType">
+      <option value="daily">Daily Message (YYYYMMDD.html)</option>
+      <option value="special">Special Message (MMMYYYY/NameN.html)</option>
+    </select>
+
+    <label for="specialName">Special Message Name (optional):</label>
+    <input type="text" id="specialName" placeholder="Sukkot1, YomKippur, etc.">
+
+    <button id="sendMessageBtn">Send / Publish Message</button>
+  </div>
+
+</body>
+</html>
