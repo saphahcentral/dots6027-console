@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Shabbat Message - Derech Olam Ministries">
+  <meta name="author" content="Derech Olam Ministries">
+  <title>Shabbat Message - Derech Olam Ministries</title>
+
+  <link rel="stylesheet" href="https://saphahcentral.github.io/saphahcentral/style-public.css">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      color: #1f1f1f;
+      line-height: 1.5;
+      max-width: 650px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    h1, h2, h3 { margin: 12px 0; }
+    blockquote {
+      background-color: #f8f8f8;
+      border-left: 4px solid #ccc;
+      padding: 8px 12px;
+      margin: 12px 0;
+    }
+    a { color: #0033cc; font-weight: bold; text-decoration: underline; }
+    .banner {
+      background-color: cornsilk;
+      border: 2px solid gold;
+      font-size: large;
+      margin: 20px 0;
+      padding: 16px;
+      text-align: center;
+    }
+    .calendar-banner {
+      background-color: #e8f4ff;
+      border: 2px solid #3399ff;
+      margin: 20px 0;
+      padding: 14px;
+      text-align: center;
+    }
+    .shofar {
+      font-size: x-large;
+      text-align: center;
+      margin: 16px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Dynamic web-only components -->
+  <div id="header"></div>
+  <div id="nav_bar"></div>
+
+  <!-- HEADER Section (Dynamic) -->
+  <h1 style="text-align: center;">
+    ${hebrew_day}, ${creational_date}
+  </h1>
+
+  <!-- Banners -->
+  <div class="banner">
+    Want to donate? Send your tithes, offerings, and donations 
+    <a href="https://paypal.me/swdb2018" target="_blank">HERE</a>.
+  </div>
+
+  <div class="calendar-banner">
+    <b>CALENDARS: </b>
+    <a href="https://drive.google.com/drive/folders/1ywthVVyPWC40U-LY7IIREezvvpbrQnte?usp=drive_link" target="_blank">
+      GET IT HERE!
+    </a>
+  </div>
+
+  <!-- STANDARD SHOFAR Section -->
+  <div class="shofar">
+    <a href="https://drive.google.com/file/d/1webn7eirKVQE5v0Th0XqQe-QjPxW1KHv/view?usp=drive_link"><b>SHOFAR BLAST</b></a>
+  </div>
+
+  <!-- MESSAGE Section (Dynamic) -->
+  <h2>🌟 Shabbat Message - ${hebrew_day}, ${creational_date}</h2>
+  <p>${greeting}</p>
+  <p>${opening}</p>
+
+  <h3>🍞 Communion - The Covenant Meal</h3>
+  ${communion} <!-- blockquotes and paragraphs HTML -->
+
+  <h3>🙌 Opening Prayer</h3>
+  ${opening_prayer} <!-- paragraphs HTML -->
+
+  <h3>✨ Torah Portion & Message</h3>
+  ${torah_message} <!-- blockquotes and paragraphs HTML -->
+
+  <h3>🙌 Closing Prayer</h3>
+  ${closing_prayer} <!-- paragraphs HTML -->
+
+  <h3>📖 Shema</h3>
+  ${shema} <!-- blockquote HTML -->
+
+  <h3>🕎 Aaronitic Blessing</h3>
+  ${blessing} <!-- blockquote HTML -->
+
+  <p>Shalom until tomorrow.</p>
+
+  <!-- Footer -->
+  <div id="footer"></div>
+
+  <script defer>
+    // Load modular components for web preview only
+    fetch("header.html").then(r => r.text()).then(d => document.getElementById("header").innerHTML = d);
+    fetch("nav_bar.html").then(r => r.text()).then(d => document.getElementById("nav_bar").innerHTML = d);
+    fetch("footer.html").then(r => r.text()).then(d => document.getElementById("footer").innerHTML = d);
+  </script>
+</body>
+</html>
