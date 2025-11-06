@@ -1,0 +1,11 @@
+Subject: {creationalDateLong} daily devotion
+
+Shalom!
+
+The DAILY DEVOTION messages are now available on the website to read:
+
+{creationalDateShort}: {messageURL}
+
+DERECH OLAM MINISTRIES INT'L
+
+PS: Missed any devotion or service? Please visit our INDEX page HERE. Also, messages have been moved into folders on {movedDateLong} ({movedDateShort}) and old links will not work. Please check it from the INDEX page if you get 404 errors...
