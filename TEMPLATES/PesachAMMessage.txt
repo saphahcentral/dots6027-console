@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Davar Lechem - Daily Word from Derech Olam Ministries">
+  <meta name="author" content="Derech Olam Ministries">
+  <title>PESACH {{YEAR}} MORNING MESSAGE</title>
+  <link rel="stylesheet" href="https://saphahcentral.github.io/saphah/style-public.css">
+
+  <script defer>
+    fetch("header.html").then(r => r.text()).then(d => document.getElementById("header").innerHTML = d);
+    fetch("nav_bar.html").then(r => r.text()).then(d => document.getElementById("nav_bar").innerHTML = d);
+    fetch("footer.html").then(r => r.text()).then(d => document.getElementById("footer").innerHTML = d);
+  </script>
+</head>
+<body>
+  <div id="header"></div>
+  <div id="nav_bar"></div>
+
+  <!--TITLE AREA-->
+  <div style="clear: both; margin-top: 20px;">
+    <h1 style="color: #1f1f1f; font-family: Montserrat; font-size: x-large; text-align: center;">
+      <b>PESACH {{YEAR}} MORNING MESSAGE</b>
+    </h1>
+  </div>
+
+  <!--DONATION BANNER-->
+  <div style="background-color: cornsilk; border: 2px solid gold; font-family: sans-serif; font-size: large; margin: 20px 0; padding: 16px; text-align: center;">
+    Want to donate? Send your tithes, offerings, and donations 
+    <a href="https://paypal.me/swdb2018" style="color: #0033cc; font-weight: bold;" target="_blank">HERE</a> 
+    (use <b><i>BHS2024 TITHES / OFFERING / DONATION</i></b> as reference). 
+    OR use the <b><u style="background-color: #fcff01;">FINANCES</u></b> tab above.
+  </div>
+
+  <!--CALENDAR BANNER-->
+  <div style="background-color: #e8f4ff; border: 2px solid #3399ff; font-family: sans-serif; font-size: large; margin: 20px 0; padding: 14px; text-align: center;">
+    <b>CALENDARS: </b>
+    <a href="https://drive.google.com/drive/folders/1ywthVVyPWC40U-LY7IIREezvvpbrQnte?usp=drive_link" 
+       style="color: #0033cc; font-weight: bold; text-decoration: underline;" target="_blank">GET IT HERE!</a>
+  </div>
+
+  <hr />
+
+  <!--SERMON AREA-->
+  <br /><br />
+
+  <div style="font-size: x-large; text-align: center;">
+    <b>SHOFAR BLAST</b>
+  </div>
+  <br /><br />
+
+  <p>[PESACH {{YEAR}} MORNING MESSAGE TEXT PLACEHOLDER]</p>
+
+  <br /><br />
+  <div style="text-align: center; font-size: large;">
+    You also can listen on Facebook & Telegram. Links on <span style="background-color: #04ff00;"><u><b>HOME</b></u></span> page.
+  </div>
+  <br /><br />
+</body>
+</html>
