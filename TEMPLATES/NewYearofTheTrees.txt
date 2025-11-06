@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tu BiShvat – {{HEBREW_DAY}} {{HEBREW_MONTH}} {{HEBREW_YEAR}}</title>
+
+  <!-- DYNAMIC HEADER / FOOTER / NAV -->
+  <script src="includes-public.js" defer></script>
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- TOP BANNERS -->
+<div class="separator" style="clear: both; text-align: center; margin-bottom: 1em;">
+  <span style="font-size: large;">
+    CALENDARS&nbsp;<a href="https://drive.google.com/drive/folders/1ywthVVyPWC40U-LY7IIREezvvpbrQnte?usp=drive_link" target="_blank">GET IT HERE!</a>
+  </span>
+</div>
+
+<div class="separator" style="clear: both; text-align: center; margin-bottom: 2em;">
+  <span style="font-size: large;">
+    Want to donate? Send your tithes, offerings and donations <a href="https://paypal.me/swdb2018" target="_blank">HERE</a> (use <b><i>BHS2024 TITHES</i></b>, <b><i>BHS2024 OFFERING</i></b>, or <b><i>BHS2024 DONATION</i></b> as reference)
+  </span>
+</div>
+
+<!-- PAGE TITLE -->
+<div class="separator" style="clear: both;">
+  <h1 style="text-align: center; font-family: Montserrat; font-size: x-large; color: #1f1f1f;">
+    Tu BiShvat – {{HEBREW_DAY}} of {{HEBREW_MONTH}}, {{HEBREW_YEAR}} - The New Year of the Trees
+  </h1>
+  <span><!--more--></span>
+</div>
+
+<div class="separator" style="clear: both; margin-bottom: 2em;"></div>
+
+<!-- MESSAGE CONTENT -->
+<div style="font-size: medium; max-width: 800px; margin: 0 auto;">
+  <p>Today marks Tu BiShvat, the New Year of the Trees. EZRA has evaluated the harvest and the trees:</p>
+  
+  <p>
+    <!-- BOOLEAN MARKER -->
+    {{#if PESACH_READY}}
+      <strong>We are ready for Pesach!</strong>
+    {{else}}
+      <strong>Nature is NOT ready for Pesach yet... Leyatzev will start at moonsighting.</strong>
+    {{/if}}
+  </p>
+  
+  <p>As the trees awaken and bear their first signs of life, we gain insight into the timing of the biblical New Year.</p>
+  
+  <p>"He has made all matters beautiful in its time." – Qoheleth (Ecclesiastes) 3:11</p>
+</div>
+
+</body>
+</html>
