@@ -1,38 +1,36 @@
 name: Publish DOM6027 HTML
 
-# Trigger on new or modified files in the PUBLISH folder
 on:
   push:
     paths:
       - 'PUBLISH/**'
+  workflow_dispatch:
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Checkout the repository
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      # Step 2: Setup Node.js environment
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '20.x'
 
-      # Step 3: Install npm dependencies
       - name: Install dependencies
         run: npm install
 
-      # Step 4: Run create-HTML.js to process the new messages
-      - name: Process PUBLISH folder and generate HTML
+      - name: Run HTML processing
         run: node create-HTML.js
 
-      # Step 5: Commit updated index2.html, archives, and any markers if needed
-      - name: Commit changes
+      - name: Send Email Notifications
+        env:
+          EMAIL_SERVICE: ${{ secrets.EMAIL_SERVICE }}        # e.g., gmail
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+          MESSAGE_TYPE: ${{ github.event.inputs.messageType || 'daily' }}
+          CREATIONAL_DATE: ${{ github.event.inputs.creationalDate || '' }}
+          MESSAGE_URL: ${{ github.event.inputs.messageURL || '' }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add DOM6027/index2.html DOM6027/archive*.html PUBLISH/*
-          git commit -m "Auto-publish new DOM6027 messages" || echo "No changes to commit"
-          git push
+          node send-email.js
