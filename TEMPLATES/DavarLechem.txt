@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Davar Lechem - Daily Word from Derech Olam Ministries">
+  <meta name="author" content="Derech Olam Ministries">
+  <title>Davar Lechem - Derech Olam Ministries</title>
+
+  <link rel="stylesheet" href="https://saphahcentral.github.io/saphah/style-public.css">
+
+  <script defer>
+    // Load modular components for web preview only
+    fetch("header.html").then(r => r.text()).then(d => document.getElementById("header").innerHTML = d);
+    fetch("nav_bar.html").then(r => r.text()).then(d => document.getElementById("nav_bar").innerHTML = d);
+    fetch("footer.html").then(r => r.text()).then(d => document.getElementById("footer").innerHTML = d);
+  </script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      color: #1f1f1f;
+      line-height: 1.5;
+      max-width: 650px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    h1, h2, h3 { margin: 12px 0; }
+    blockquote {
+      background-color: #f8f8f8;
+      border-left: 4px solid #ccc;
+      padding: 8px 12px;
+      margin: 12px 0;
+    }
+    a { color: #0033cc; font-weight: bold; text-decoration: underline; }
+    .banner {
+      background-color: cornsilk;
+      border: 2px solid gold;
+      font-size: large;
+      margin: 20px 0;
+      padding: 16px;
+      text-align: center;
+    }
+    .calendar-banner {
+      background-color: #e8f4ff;
+      border: 2px solid #3399ff;
+      margin: 20px 0;
+      padding: 14px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Dynamic web-only components -->
+  <div id="header"></div>
+  <div id="nav_bar"></div>
+
+  <!-- HEADER Section (Dynamic) -->
+  <h1 style="text-align: center;">
+    ${hebrew_day}, ${creational_date}
+  </h1>
+
+  <!-- Banners -->
+  <div class="banner">
+    Want to donate? Send your tithes, offerings, and donations <a href="finances.html">HERE</a>.
+  </div>
+
+  <div class="banner">
+    Join our TEAMS community and receive these messages daily! <a href="https://teams.live.com/l/community/FEAwYwQL89BUsmLNwQ">JOIN HERE</a>.
+  </div>
+  
+  <div class="calendar-banner">
+    <b>CALENDARS: </b>
+    <a href="https://drive.google.com/drive/folders/1ywthVVyPWC40U-LY7IIREezvvpbrQnte?usp=drive_link" target="_blank">
+      GET IT HERE!
+    </a>
+  </div>
+
+  <!-- MESSAGE Section (Dynamic) -->
+  <h2>🌟 Davar Lechem - ${hebrew_day}, ${creational_date}</h2>
+
+  <h3>✨ Theme - ${theme}</h3>
+  <p>${greeting}</p>
+  
+  <h3>📖 Scripture Reading:</h3>
+  ${scriptures} <!-- blockquotes HTML -->
+
+  <h3>✨ Reflection:</h3>
+  ${reflection} <!-- paragraphs HTML -->
+
+  <h3>🙌 Prayer:</h3>
+  ${prayer} <!-- paragraphs HTML -->
+
+  <h3>🕎 Aaronitic Blessing:</h3>
+  ${blessing} <!-- blockquote HTML -->
+
+  <p>Shalom until tomorrow.</p>
+
+  <!-- Footer -->
+  <div id="footer"></div>
+</body>
+</html>
