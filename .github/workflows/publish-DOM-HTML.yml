@@ -1,34 +1,38 @@
 name: Publish DOM6027 HTML
 
+# Trigger on new or modified files in the PUBLISH folder
 on:
   push:
     paths:
       - 'PUBLISH/**'
 
 jobs:
-  publish-html:
+  publish:
     runs-on: ubuntu-latest
     steps:
+      # Step 1: Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Step 2: Setup Node.js environment
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
+      # Step 3: Install npm dependencies
       - name: Install dependencies
-        run: |
-          npm install axios jsdom
+        run: npm install
 
-      - name: Process new HTML files
-        run: |
-          node scripts/process-publish.js
+      # Step 4: Run create-HTML.js to process the new messages
+      - name: Process PUBLISH folder and generate HTML
+        run: node create-HTML.js
 
-      - name: Commit updates
+      # Step 5: Commit updated index2.html, archives, and any markers if needed
+      - name: Commit changes
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          git add .
-          git commit -m "Publish new DOM6027 HTML files [skip ci]" || echo "No changes to commit"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add DOM6027/index2.html DOM6027/archive*.html PUBLISH/*
+          git commit -m "Auto-publish new DOM6027 messages" || echo "No changes to commit"
           git push
