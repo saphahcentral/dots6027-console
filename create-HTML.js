@@ -1,146 +1,93 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const memberSelect = document.getElementById('memberSelect');
-  const messageDate = document.getElementById('messageDate');
-  const messageType = document.getElementById('messageType');
-  const specialName = document.getElementById('specialName');
-  const generateBtn = document.getElementById('generateHTMLBtn');
-  const status = document.getElementById('status');
+// create-HTML.js
 
-  // Load members
-  const members = ["Magdalena Kaplan", "Ezra Cohen", "Levi Stern"];
-  members.forEach(m => {
-    const opt = document.createElement('option');
-    opt.value = m;
-    opt.textContent = m;
-    memberSelect.appendChild(opt);
-  });
+document.getElementById('sendMessageBtn').addEventListener('click', async () => {
+    const member = document.getElementById('memberSelect').value;
+    const subject = document.getElementById('messageSubject').value.trim();
+    const body = document.getElementById('messageBody').value.trim();
+    const messageType = document.getElementById('messageType').value;
+    const specialName = document.getElementById('specialName').value.trim();
 
-  generateBtn.addEventListener('click', async () => {
-    status.textContent = "Processing...";
-    const member = memberSelect.value;
-    const date = messageDate.value;
-    let type = messageType.value;
-    const special = specialName.value.trim();
-
-    if (!member || !date) {
-      status.textContent = "Please select member and date!";
-      status.style.color = "red";
-      return;
+    if (!member || !subject || !body) {
+        alert("Please fill in Member, Subject, and Body.");
+        return;
     }
 
-    try {
-      // STEP 0: Convert date to Creational calendar
-      const creationalDate = convertToCreational(date);
+    // Get today's Creational date (placeholder function, replace with your conversion)
+    const today = new Date();
+    const creationalDate = convertToCreational(today); // {year}, {month}, {day} placeholders
 
-      // STEP 1: Fetch Teams message for this date
-      const teamsMessage = await fetchTeamsMessage(date);
-
-      // STEP 2: Detect type if not manually set
-      if (!type) type = detectMessageType(teamsMessage.title);
-
-      // STEP 3: Determine template file
-      const templateFile = selectTemplate(type, special);
-
-      // STEP 4: Check Leyatzev marker if Shnein Asar 15
-      const leyatzevMarker = await checkLeyatzev(creationalDate);
-
-      // STEP 5: Replace placeholders
-      let htmlContent = await generateHTML(templateFile, creationalDate, member, teamsMessage, leyatzevMarker);
-
-      // STEP 6: Publish HTML
-      await publishHTML(htmlContent, creationalDate);
-
-      // STEP 7: Update index2.html & archive if first day of Gregorian month
-      await updateIndexAndArchive(creationalDate, htmlContent);
-
-      status.textContent = `HTML generated and ready for publishing for ${creationalDate}! Leyatzev=${leyatzevMarker}`;
-      status.style.color = "green";
-
-    } catch (err) {
-      console.error(err);
-      status.textContent = "Error generating HTML: " + err.message;
-      status.style.color = "red";
+    // Determine filename
+    let filename = '';
+    if (messageType === 'daily') {
+        // Example: YYYYMMDD.html
+        filename = `${creationalDate.year}${pad(creationalDate.month)}${pad(creationalDate.day)}.html`;
+    } else if (messageType === 'special') {
+        if (!specialName) {
+            alert("Special message name is required for Special Messages.");
+            return;
+        }
+        // Example: MMMYYYY/NameN.html
+        filename = `${creationalDate.monthName}${creationalDate.year}/${specialName}.html`;
     }
-  });
 
-  // --- FUNCTIONS ---
-
-  function convertToCreational(date) {
-    // Convert Gregorian to Creational calendar (example logic, adjust to real mapping)
-    const d = new Date(date);
-    const creationalYear = d.getFullYear() + 2002; // placeholder conversion
-    const months = ["Rishon","Sheni","Shlishi","Revi'i","Chamishi","Shishi","Shev'i","Shmini","Tishi","Asiri","Achad Asar","Shnein Asar","Leyatzev"];
-    const day = d.getDate();
-    const monthIndex = d.getMonth(); // map to Creational month
-    return `${months[monthIndex]} ${day}, ${creationalYear} AA`;
-  }
-
-  async function fetchTeamsMessage(date) {
-    // Placeholder: fetch Teams message for the date
-    return { title: "Shabbat Rishon 1 (Pesach 1)", body: "Message body here" };
-  }
-
-  function detectMessageType(title) {
-    const bracketMatch = title.match(/\((.*?)\)/);
-    if (bracketMatch) return 'special';
-    if (title.startsWith("Shabbat")) return 'shabbat';
-    return 'daily';
-  }
-
-  function selectTemplate(type, special) {
-    if (type === 'daily') return 'templates/davar-lechem-template.html';
-    if (type === 'shabbat') return 'templates/shabbat-template.html';
-    if (type === 'special') return `templates/${special || 'special-template'}.html`;
-    return 'templates/davar-lechem-template.html';
-  }
-
-  async function checkLeyatzev(creationalDate) {
-    // Only check on Shnein Asar 15
-    if (!creationalDate.includes("Shnein Asar 15")) return false;
-
-    // Fetch data from Ynet & Hayadan
-    const ynetReady = await fetchLeyatzevYnet();
-    const hayadanReady = await fetchLeyatzevHayadan();
-
-    return ynetReady || hayadanReady;
-  }
-
-  async function fetchLeyatzevYnet() {
-    // Example: scrape or API
-    // return true if grain/trees ready, false if not
-    return false;
-  }
-
-  async function fetchLeyatzevHayadan() {
-    return false;
-  }
-
-  async function generateHTML(templateFile, date, member, teamsMessage, leyatzev) {
-    const resp = await fetch(templateFile);
-    let template = await resp.text();
-
-    template = template.replace(/{date}/g, date);
-    template = template.replace(/{member}/g, member);
-    template = template.replace(/{title}/g, teamsMessage.title);
-    template = template.replace(/{body}/g, teamsMessage.body);
-    template = template.replace(/{leyatzev}/g, leyatzev ? "TRUE" : "FALSE");
-
-    return template;
-  }
-
-  async function publishHTML(htmlContent, date) {
-    console.log("Publishing HTML for date:", date);
-    // Send to PUBLISH folder
-  }
-
-  async function updateIndexAndArchive(date, htmlContent) {
-    // If first Gregorian day, update archive
-    const d = new Date();
-    if (d.getDate() === 1) {
-      console.log("Updating archive for previous month...");
-      // Append all links for previous month to archive
+    // Prepare Leyatzev marker
+    let leyatzevMarker = "{leyatzev}"; // default placeholder
+    // Check if today is Shnein Asar 15
+    if (creationalDate.month === 12 && creationalDate.day === 15) { 
+        leyatzevMarker = "UNKNOWN"; // YML workflow will update this
     }
-    console.log("Updating index2.html with new link for:", date);
-  }
 
+    // Load the appropriate template
+    let templateFile = '';
+    if (messageType === 'daily') templateFile = 'templates/DavarLechem.html';
+    else if (messageType === 'special') {
+        templateFile = `templates/${specialName}.html`; // special templates must exist
+    }
+
+    fetch(templateFile)
+        .then(res => res.text())
+        .then(template => {
+            // Replace placeholders
+            let htmlContent = template
+                .replace(/{member}/g, member)
+                .replace(/{subject}/g, subject)
+                .replace(/{body}/g, body)
+                .replace(/{year}/g, creationalDate.year)
+                .replace(/{month}/g, creationalDate.month)
+                .replace(/{monthName}/g, creationalDate.monthName)
+                .replace(/{day}/g, creationalDate.day)
+                .replace(/{leyatzev}/g, leyatzevMarker);
+
+            // Save to PUBLISH folder
+            saveHTMLFile(filename, htmlContent);
+            alert(`HTML file "${filename}" created in PUBLISH folder.`);
+        })
+        .catch(err => console.error("Error loading template:", err));
 });
+
+// Utility: pad month/day with leading zero
+function pad(num) {
+    return num.toString().padStart(2, '0');
+}
+
+// Placeholder: convert Gregorian to Creational
+function convertToCreational(date) {
+    // Replace with your actual Creational conversion logic
+    const creational = {
+        year: 6028, // example
+        month: date.getMonth() + 1,
+        monthName: "Rishon",
+        day: date.getDate()
+    };
+    return creational;
+}
+
+// Save file to PUBLISH folder
+function saveHTMLFile(filename, content) {
+    // Since this runs in browser, use a download link approach
+    const blob = new Blob([content], { type: 'text/html' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
+}
