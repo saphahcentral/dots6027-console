@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>DOTS6027 - Console 1</title>
   <link rel="stylesheet" href="https://saphahcentral.github.io/saphah/style-internal.css">
-  <script src="publish-message.js" defer></script>
+  <script src="create-HTML.js" defer></script>
   <style>
     body { padding: 2em; }
     h1 { text-align: center; margin-bottom: 1em; }
@@ -19,25 +19,28 @@
   <h1>Console 1: Member & Message Posting Service</h1>
 
   <div class="form-container">
+
     <label for="memberSelect">Select Member:</label>
     <select id="memberSelect"></select>
 
-    <label for="messageSubject">Message Subject:</label>
-    <input type="text" id="messageSubject" placeholder="Enter subject here">
-
-    <label for="messageBody">Message Body:</label>
-    <textarea id="messageBody" rows="10" placeholder="Enter message here"></textarea>
+    <label for="messageDate">Select Date (Creational date):</label>
+    <input type="date" id="messageDate">
 
     <label for="messageType">Message Type:</label>
     <select id="messageType">
-      <option value="daily">Daily Message (YYYYMMDD.html)</option>
-      <option value="special">Special Message (MMMYYYY/NameN.html)</option>
+      <option value="">Auto-detect from Teams</option>
+      <option value="daily">Davar Lechem</option>
+      <option value="shabbat">Shabbat</option>
+      <option value="special">Special (Holy Day)</option>
     </select>
 
-    <label for="specialName">Special Message Name (optional):</label>
-    <input type="text" id="specialName" placeholder="Sukkot1, YomKippur, etc.">
+    <label for="specialName">Special Message Name (optional, e.g., Pesach 7):</label>
+    <input type="text" id="specialName" placeholder="Leave blank if auto-detected">
 
-    <button id="sendMessageBtn">Send / Publish Message</button>
+    <button id="generateHTMLBtn">Generate & Publish HTML</button>
+
+    <div id="status" style="margin-top:1em;color:green;"></div>
+
   </div>
 
 </body>
