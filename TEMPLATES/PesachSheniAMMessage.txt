@@ -46,8 +46,8 @@
   <!--SERMON AREA: SHOFAR, MESSAGE, SHEMA and BLESSING-->
   <br /><br />
 
-  <div style="font-size: x-large; text-align: center;">
-    <b>SHOFAR BLAST</b>
+  <div class="separator" style="clear: both; text-align: center;">
+    <a href="https://www.youtube.com/watch?v=8WyLYWzfdaM"><b><span style="font-size: large;">SHOFAR BLAST</span></b></a>
   </div>
   <br /><br />
 
