@@ -1,0 +1,64 @@
+name: DOTS6027 DOWS6027 Automation
+
+on:
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Force run (ignore last-day check)"
+        required: false
+        default: "true"
+
+  schedule:
+    # Run daily at 00:00 UTC
+    - cron: "0 0 * * *"
+
+jobs:
+  run_dows6027_console:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: |
+          npm install node-fetch date-fns jsdom @actions/core @actions/github
+
+      - name: Determine run mode
+        id: mode
+        run: |
+          echo "Checking run mode..."
+
+          # Manual trigger forces a run
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Manual dispatch → FORCE RUN"
+            echo "run_mode=force" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Scheduled run → last day of month check
+          TODAY_UTC=$(date -u +%Y-%m-%d)
+          TOMORROW_MONTH=$(date -u -d "$TODAY_UTC +1 day" +%m)
+          TODAY_MONTH=$(date -u +%m)
+
+          if [ "$TOMORROW_MONTH" != "$TODAY_MONTH" ]; then
+            echo "Today is LAST DAY of month → run"
+            echo "run_mode=run" >> $GITHUB_OUTPUT
+          else
+            echo "Not last day → skipping"
+            echo "run_mode=skip" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Stop if run_mode is skip
+        if: steps.mode.outputs.run_mode == 'skip'
+        run: exit 0
+
+      - name: Run DOTS6027 DOWS6027 Automation
+        run: node publish-message.js
