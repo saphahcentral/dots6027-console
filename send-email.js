@@ -2,37 +2,51 @@
 const fs = require('fs');
 const path = require('path');
 
-// Environment variables or parameters passed from the workflow
-const MESSAGE_TYPE = process.env.MESSAGE_TYPE || 'daily'; // daily, shabbat, special
-const CREATIONAL_DATE = process.env.CREATIONAL_DATE || '';
+// Environment variables
+const MESSAGE_TYPE = (process.env.MESSAGE_TYPE || 'daily').toLowerCase();
+let CREATIONAL_DATE = process.env.CREATIONAL_DATE || '';
 const MESSAGE_URL = process.env.MESSAGE_URL || '';
-const SCHEDULE_FOLDER = path.join(__dirname, '../saphahemailservices/SCHEDULE'); // relative to repo
 
-// Ensure the SCHEDULE folder exists
+const SCHEDULE_FOLDER = path.join(__dirname, '../saphahemailservices/SCHEDULE');
+
+// Ensure SCHEDULE folder exists
 if (!fs.existsSync(SCHEDULE_FOLDER)) {
     fs.mkdirSync(SCHEDULE_FOLDER, { recursive: true });
     console.log(`Created SCHEDULE folder at: ${SCHEDULE_FOLDER}`);
 }
 
-// Map message type to template
-let templateFile = '';
-switch (MESSAGE_TYPE.toLowerCase()) {
-    case 'daily':
-        templateFile = 'email-DavarLechem.txt';
-        break;
-    case 'shabbat':
-        templateFile = 'email-Shabbat.txt';
-        break;
-    case 'special':
-    case 'splshabbat':
-        templateFile = 'email-SPLShabbat.txt';
-        break;
-    default:
-        console.error("Unknown MESSAGE_TYPE:", MESSAGE_TYPE);
-        process.exit(1);
+// Date normalization (force YYYY-MM-DD)
+const parsedDate = new Date(CREATIONAL_DATE);
+if (!CREATIONAL_DATE || isNaN(parsedDate.getTime())) {
+    CREATIONAL_DATE = new Date().toISOString().slice(0, 10);
+} else {
+    CREATIONAL_DATE = parsedDate.toISOString().slice(0, 10);
 }
 
-// Build the email job
+// Map message type to template
+const typeToTemplate = {
+    "daily": "email-DavarLechem.txt",
+    "shabbat": "email-Shabbat.txt",
+    "special": "email-SPLShabbat.txt",
+    "splshabbat": "email-SPLShabbat.txt"
+};
+
+if (!typeToTemplate[MESSAGE_TYPE]) {
+    console.error("Unknown MESSAGE_TYPE:", MESSAGE_TYPE);
+    process.exit(1);
+}
+
+const templateFile = typeToTemplate[MESSAGE_TYPE];
+
+// Validate message URL (shabbat allowed without)
+if (MESSAGE_TYPE !== "shabbat" && MESSAGE_TYPE !== "splshabbat") {
+    if (!MESSAGE_URL) {
+        console.error("MESSAGE_URL required for message type:", MESSAGE_TYPE);
+        process.exit(1);
+    }
+}
+
+// Build job
 const job = {
     type: MESSAGE_TYPE,
     date: CREATIONAL_DATE,
@@ -41,11 +55,15 @@ const job = {
     createdAt: new Date().toISOString()
 };
 
-// Filename safe for filesystem
-const filenameSafeType = MESSAGE_TYPE.replace(/\s+/g, '_').toLowerCase();
-const fileName = `schedule-${CREATIONAL_DATE}-${filenameSafeType}.json`;
+// Unique filename: date + message type + 4-digit random ID
+const randomID = Math.random().toString(36).substr(2,4);
+const filename = `schedule-${CREATIONAL_DATE}-${MESSAGE_TYPE}-${randomID}.json`;
 
-// Write to the SCHEDULE folder in the repo
-fs.writeFileSync(path.join(SCHEDULE_FOLDER, fileName), JSON.stringify(job, null, 2), 'utf8');
+// Write to SCHEDULE directory
+fs.writeFileSync(
+    path.join(SCHEDULE_FOLDER, filename),
+    JSON.stringify(job, null, 2),
+    'utf8'
+);
 
-console.log(`Scheduled email job created in repo: ${fileName}`);
+console.log(`📧 Scheduled email job created: ${filename}`);
