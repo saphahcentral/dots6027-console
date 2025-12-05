@@ -9,8 +9,10 @@ on:
         default: "true"
 
   schedule:
-    # Run daily at 00:00 UTC
     - cron: "0 0 * * *"
+
+permissions:
+  contents: write
 
 jobs:
   run_dows6027_console:
@@ -20,30 +22,28 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies
-        run: |
-          npm install node-fetch date-fns jsdom @actions/core @actions/github
+        run: npm ci
 
       - name: Determine run mode
         id: mode
         run: |
           echo "Checking run mode..."
 
-          # Manual trigger forces a run
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "Manual dispatch → FORCE RUN"
             echo "run_mode=force" >> $GITHUB_OUTPUT
             exit 0
           fi
 
-          # Scheduled run → last day of month check
           TODAY_UTC=$(date -u +%Y-%m-%d)
           TOMORROW_MONTH=$(date -u -d "$TODAY_UTC +1 day" +%m)
           TODAY_MONTH=$(date -u +%m)
