@@ -1,6 +1,4 @@
 // publish-message.js
-// Receives POST or trigger file, commits HTML to GitHub, optionally triggers Telegram
-
 const core = require('@actions/core');
 const github = require('@actions/github');
 const fs = require('fs');
@@ -13,9 +11,9 @@ async function run() {
 
         const octokit = github.getOctokit(token);
 
-        // Determine input source: POST JSON (console1.js) or trigger file
         let inputData;
         const triggerFile = path.join(__dirname, 'telegram-triggers', 'input.json');
+
         if (fs.existsSync(triggerFile)) {
             inputData = JSON.parse(fs.readFileSync(triggerFile, 'utf8'));
         } else if (fs.existsSync('input.json')) {
@@ -26,9 +24,8 @@ async function run() {
 
         const { members, subject, body, filePath, service, warnURL } = inputData;
 
-        // --- Handle Telegram trigger ---
+        // 🔹 TELEGRAM TRIGGER GENERATION
         if (service && warnURL) {
-            // Compose the content for DOTS6027-CONSOLE Telegram trigger
             const triggerDir = path.join(__dirname, 'telegram-triggers');
             if (!fs.existsSync(triggerDir)) fs.mkdirSync(triggerDir, { recursive: true });
 
@@ -42,26 +39,50 @@ ${body}
 
 ${warnURL}
 `;
-
             fs.writeFileSync(triggerPath, triggerContent.trim() + '\n');
             console.log(`📨 Telegram trigger created: ${triggerFileName}`);
         }
 
-        // --- Commit HTML to GitHub ---
-        if (filePath && subject && body) {
-            const contentHTML = `<h1>${subject}</h1>\n<p>${body}</p>`;
-            fs.writeFileSync(path.resolve(filePath), contentHTML);
+        // 🔹 DETERMINE REPO FROM SERVICE NAME
+        const repoMap = {
+            "DOM6027": "dom6027",
+            "DOWS6027": "dows6027",
+            "DOTS6027": "dots6027"
+        };
 
-            const repoOwner = 'saphahcentral';
-            const repoName = service === 'DOM6027' ? 'dom6027' : 'dows6027';
+        const repoName = repoMap[service];
+        if (!repoName) throw new Error(`Unknown service '${service}', repo target cannot be determined.`);
+
+        // 🔹 COMMIT MESSAGE TO REPO
+        if (filePath && subject && body) {
+
+            // Convert body to basic safe HTML format
+            const safeBody = body.replace(/\n/g, "<br>");
+            const contentHTML = `<h1>${subject}</h1>\n<p>${safeBody}</p>`;
+
+            const fileBase64 = Buffer.from(contentHTML).toString('base64');
+
+            // Check if file exists so we include SHA
+            let sha;
+            try {
+                const res = await octokit.rest.repos.getContent({
+                    owner: "saphahcentral",
+                    repo: repoName,
+                    path: filePath
+                });
+                sha = res.data.sha;
+            } catch (err) {
+                sha = undefined; // File does not exist
+            }
 
             await octokit.rest.repos.createOrUpdateFileContents({
-                owner: repoOwner,
+                owner: "saphahcentral",
                 repo: repoName,
                 path: filePath,
                 message: `Add message: ${subject}`,
-                content: Buffer.from(contentHTML).toString('base64'),
-                branch: 'main'
+                content: fileBase64,
+                branch: "main",
+                sha: sha
             });
 
             console.log(`✅ Message committed to GitHub repo ${repoName}: ${filePath}`);
